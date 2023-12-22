@@ -1,5 +1,9 @@
 #include "monty.h"
 
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 void monty_push(stack_t **stack, unsigned int line_number);
 void monty_pall(stack_t **stack, unsigned int line_number);
 void monty_pint(stack_t **stack, unsigned int line_number);
@@ -45,7 +49,7 @@ void monty_push(stack_t **stack, unsigned int line_number)
 		}
 	}
 	new->n = atoi(op_toks[1]);
-	if (check_mode(*stack) == STACK)
+	if (check_mode(*stack_t) == STACK)
 	{
 		tmp = (*stack)->next;
 		new->prev = *stack;
