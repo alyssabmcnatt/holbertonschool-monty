@@ -1,17 +1,16 @@
 #include "monty.h"
 #include <string.h>
 
-
 void free_tokens(void);
 unsigned int token_arr_len(void);
 int is_empty_line(char *line, char *delims);
 void (*get_op_func(char *opcode))(stack_t**, unsigned int);
 int run_monty(FILE *script_fd);
 
-
 /**
  * free_tokens - Frees the global op_toks array of strings.
  */
+
 void free_tokens(void)
 {
 	size_t i = 0;
@@ -40,8 +39,7 @@ unsigned int token_arr_len(void)
 }
 
 /**
- * is_empty_line - Checks if a line read from getline only
- * contains delimiters.
+ * is_empty_line - Checks if a line read from getline only contains delimiters.
  * @line: A pointer to the line.
  * @delims: A string of delimiter characters.
  *
@@ -67,8 +65,7 @@ int is_empty_line(char *line, char *delims)
 }
 
 /**
- * get_op_func - Matches an opcode with its
- * corresponding function.
+ * get_op_func - Matches an opcode with its corresponding function.
  * @opcode: The opcode to match.
  *
  * Return: A pointer to the corresponding function.
@@ -84,6 +81,16 @@ void (*get_op_func(char *opcode))(stack_t**, unsigned int)
 		{"swap", monty_swap},
 		{"add", monty_add},
 		{"nop", monty_nop},
+		{"sub", monty_sub},
+		{"div", monty_div},
+		{"mul", monty_mul},
+		{"mod", monty_mod},
+		{"pchar", monty_pchar},
+		{"pstr", monty_pstr},
+		{"rotl", monty_rotl},
+		{"rotr", monty_rotr},
+		{"stack", monty_stack},
+		{"queue", monty_queue},
 		{NULL, NULL}
 	};
 	int i;
@@ -93,15 +100,15 @@ void (*get_op_func(char *opcode))(stack_t**, unsigned int)
 		if (strcmp(opcode, op_funcs[i].opcode) == 0)
 			return (op_funcs[i].f);
 	}
+
 	return (NULL);
 }
 
 /**
- * run_monty - Primary function to execute a bytecodes script.
- * @script_fd: File descriptor for an open bytecodes script.
+ * run_monty - Primary function to execute a Monty bytecodes script.
+ * @script_fd: File descriptor for an open Monty bytecodes script.
  *
- * Return: EXIT_SUCCESS on success, respective error code
- * on failure.
+ * Return: EXIT_SUCCESS on success, respective error code on failure.
  */
 
 int run_monty(FILE *script_fd)
@@ -126,7 +133,7 @@ int run_monty(FILE *script_fd)
 			free_stack(&stack);
 			return (malloc_error());
 		}
-		else if (op_toks[0][0] == '#')
+		else if (op_toks[0][0] == '#') /* comment line */
 		{
 			free_tokens();
 			continue;
@@ -153,11 +160,13 @@ int run_monty(FILE *script_fd)
 		free_tokens();
 	}
 	free_stack(&stack);
+
 	if (line && *line == 0)
 	{
 		free(line);
 		return (malloc_error());
 	}
+
 	free(line);
 	return (exit_status);
 }
